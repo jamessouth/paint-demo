@@ -70,7 +70,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: [
       '**/*',
-      '!BorderPaint.min.js',
+      '!demo.js',
     ] }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
