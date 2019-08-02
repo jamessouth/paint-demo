@@ -1,0 +1,57 @@
+{
+  "name": "paint-demo",
+  "version": "1.0.0",
+  "description": "css paint demo",
+  "private": "true",
+  "browserslist": [
+    "last 2 versions",
+    "> 1%",
+    "not dead",
+    "not ie < 12"
+  ],
+  "scripts": {
+    "lint": "eslint ./src/js",
+    "dev": "webpack-dev-server",
+    "build": "webpack && cp src/favicon.ico docs/favicon.ico && cp src/manifest.webmanifest docs/manifest.webmanifest && cp -r src/images/icons/ docs/images/icons && cp src/sw.js.map docs/sw.js.map",
+    "prebuild": "rm -f docs/BorderPaint.min.js docs/ButtonBG.min.js && npx minify src/js/BorderPaint.js --out-file docs/BorderPaint.min.js && npx minify src/js/ButtonBG.js --out-file docs/ButtonBG.min.js && webpack --config sw-webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamessouth/portfolio.git"
+  },
+  "author": "james south",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jamessouth/portfolio/issues"
+  },
+  "homepage": "https://github.com/jamessouth/portfolio#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/preset-env": "^7.5.5",
+    "babel-eslint": "^10.0.2",
+    "babel-loader": "^8.0.6",
+    "babel-minify": "^0.5.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.1.0",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^4.0.0-beta.8",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "sass-loader": "^7.1.0",
+    "script-ext-html-webpack-plugin": "^2.1.4",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.38.0",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.7.2"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "core-js": "^3.1.4"
+  }
+}
