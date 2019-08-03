@@ -1,0 +1,4 @@
+generative element backgrounds with css paint
+
+with the new css paint api (aka houdini) we can use the full array of html canvas drawing methods (or at least a lot of them) to draw anything we want and use it anywhere a CSS property takes an image.  today i want to show how i used houdini in my newly rebuilt portfolio site to create generative border images and speech-bubble shaped divs.  i will cover using houdini with webpack and babel and how to get past all the snags i hit making the following demos.  note that i am not currently polyfilling houdini on my portfolio site so the cool stuff will only work in chrome.
+

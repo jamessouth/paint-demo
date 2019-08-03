@@ -56,8 +56,18 @@ class Demo {
     // ctx.fillStyle = radgrad;
     ctx.fillRect(0, 0, width, height);
 
-    const ctr = [width/2, height/2 - 5];
-    for (let i = 0; i < 4000; i += 1) {
+    for (let i = 0; i < 174; i++) {
+      ctx.fillStyle = 'rgb(255, 255, 255)';
+      ctx.fillRect(Demo.getDistAlongSide(width), Demo.getDistAlongSide(height), 1, 1);
+
+    }
+
+    const ctr = [
+      width / 2,
+      height - 5,
+    ];
+
+    for (let i = 0; i < 700; i += 1) {
       const startSide = i % 4;
       const endSide = (startSide + Demo.getEndSide()) % 4;
       ctx.beginPath();
