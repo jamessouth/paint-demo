@@ -47,17 +47,18 @@ class Demo {
     // radgrad.addColorStop(.55, `hsla(0deg, 80%, 10%, 80%)`);
     //
     //
-    // ctx.fillStyle = 'black';
+    // ctx.fillStyle = 'rgb(60, 60, 60)';
     // ctx.fillRect(0, 0, width, height);
-    for (let i = 0; i < 900; i += 1) {
+    for (let i = 0; i < 13000; i += 1) {
       const startSide = i % 4;
       const endSide = (startSide + Demo.getEndSide()) % 4;
       ctx.beginPath();
       ctx.moveTo(...Demo.getPoint(startSide, width, height));
       ctx.lineTo(...Demo.getPoint(endSide, width, height));
       ctx.lineWidth = Demo.getWidth();
-      ctx.lineCap = 'square';
-      ctx.strokeStyle = `hsla(0deg, 50%, 0%, ${(i % 40) + 30}%)`;
+      // ctx.lineCap = 'square';
+      // ctx.strokeStyle = `hsla(0deg, 50%, 0%, .02)`;
+      ctx.strokeStyle = `rgba(${10 + (i % 20)}, ${5 + (i % 30)}, ${0 + (i % 20)}, .01)`;
       ctx.stroke();
     }
   }
