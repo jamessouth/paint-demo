@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[1],{"5+t+":function(n,t,e){},e6Wu:function(n,t,e){"use strict";e.r(t);e("07d7"),e("5s+n"),e("5+t+");CSS.paintWorklet?CSS.paintWorklet.addModule("./demo.min.js"):e.e(0).then(e.t.bind(null,"BYjR",7)).then(function(){return CSS.paintWorklet.addModule("./demo.min.js")})}},[["e6Wu",2,3]]]);
+//# sourceMappingURL=main.a8826b781d8a077fb052.js.map
