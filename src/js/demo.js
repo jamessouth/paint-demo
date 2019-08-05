@@ -1,5 +1,5 @@
 class Demo {
-  static get inputProperties() { return ['--starCount']; }
+  // static get inputProperties() { return ['--starCount']; }
 
   static getDistAlongSide(max) {
     return Math.floor(Math.random() * (max + 1));
@@ -46,9 +46,9 @@ class Demo {
   paint(ctx, { width, height }, props) { // eslint-disable-line
     ctx.fillStyle = 'rgb(0, 0, 0)';
     ctx.fillRect(0, 0, width, height);
-    const numStars = props.get('--starCount');
-    const stars = numStars.length == 0 ? 188 : numStars;
-    for (let i = 0; i < stars; i += 1) {
+    // const numStars = props.get('--starCount');
+    // const stars = numStars.length == 0 ? 188 : numStars;
+    for (let i = 0; i < 188; i += 1) {
       ctx.fillStyle = 'rgb(255, 255, 255)';
       ctx.fillRect(Demo.getDistAlongSide(width), Demo.getDistAlongSide(height), 1, 1);
     }
