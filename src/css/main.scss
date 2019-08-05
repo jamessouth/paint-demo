@@ -3,15 +3,10 @@
   padding: 0;
   box-sizing: border-box;
 }
-body{
-}
 div{
-  --stars: 122;
-
-  // height: 100vh;
+  --stars: 322;
+  height: 100vh;
   width: 100vw;
-  height: 5000px;
-  // width: 4000px;
   background-image: linear-gradient(black, black);
   background-image: paint(demo);
   overflow-x: hidden;

@@ -43,12 +43,18 @@ class Demo {
     return base + Math.floor(Math.random() * range + 1);
   }
 
+  static getTransparency() {
+    return Math.floor(Math.random() * 100 + 1) / 100;
+  }
+
   paint(ctx, { width, height }, props) { // eslint-disable-line
     const stars = props.get('--stars');
+    
     ctx.fillStyle = 'rgb(0, 0, 0)';
     ctx.fillRect(0, 0, width, height);
+
     for (let i = 0; i < stars; i += 1) {
-      ctx.fillStyle = 'rgb(255, 255, 255)';
+      ctx.fillStyle = `rgba(255, 255, 255, ${Demo.getTransparency()})`;
       ctx.fillRect(Demo.getDistAlongSide(width), Demo.getDistAlongSide(height), 1, 1);
     }
 
