@@ -10,7 +10,7 @@ class won't bundle if not imported
 won't run if transpiled
 no luck excluding from babel
 
-css custom properties don't work on body
+css custom properties don't work on body in chrome
 pseudo element workaround but doesn't work with polyfill
-div covering viewport works
-polyfilled browsers don't redraw on resize except chrome
+div covering viewport works sometimes
+polyfilled browsers don't redraw on resize - will repeat or just be blank

@@ -46,14 +46,16 @@ class Demo {
   paint(ctx, { width, height }, props) { // eslint-disable-line
     ctx.fillStyle = 'rgb(0, 0, 0)';
     ctx.fillRect(0, 0, width, height);
-    for (let i = 0; i < props.get('--starCount'); i += 1) {
+    const numStars = props.get('--starCount');
+    const stars = numStars.length == 0 ? 188 : numStars;
+    for (let i = 0; i < stars; i += 1) {
       ctx.fillStyle = 'rgb(255, 255, 255)';
       ctx.fillRect(Demo.getDistAlongSide(width), Demo.getDistAlongSide(height), 1, 1);
     }
 
     const ctr = [
       width / 2,
-      height + 5,
+      height + 2,
     ];
 
     for (let i = 0; i < 700; i += 1) {
