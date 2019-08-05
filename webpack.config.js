@@ -78,7 +78,8 @@ module.exports = {
     }),
     new HTMLWebpackPlugin({
       template: './src/html/index.html',
-      title: 'CSS Paint Demo - 1',
+      title: 'CSS Paint Demo 1',
+      filename: 'demo1.html',
     }),
     new ScriptExtHTMLWebpackPlugin({
       defaultAttribute: 'async',

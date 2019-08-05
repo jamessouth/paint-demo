@@ -4,9 +4,13 @@
   box-sizing: border-box;
 }
 body{
-  height: 100vh;
+}
+div{
+  --stars: 122;
+
+  // height: 100vh;
   width: 100vw;
-  // height: 5000px;
+  height: 5000px;
   // width: 4000px;
   background-image: linear-gradient(black, black);
   background-image: paint(demo);
