@@ -3,11 +3,19 @@
   padding: 0;
   box-sizing: border-box;
 }
-div{
+body > div{
   --stars: 322;
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
+  width: 100%;
   background-image: linear-gradient(black, black);
-  background-image: paint(demo);
+  background-image: paint(demo, starss);
   overflow-x: hidden;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+div div{
+  width: 200px;
+  height: 200px;
+  background-color: red;
+  margin: 1em auto;
 }

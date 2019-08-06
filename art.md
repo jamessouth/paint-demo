@@ -10,9 +10,11 @@ class won't bundle if not imported
 won't run if transpiled
 no luck excluding from babel
 
-css custom properties don't work on body in chrome
+
+I set the div to cover the viewport here but on a real page with content, min-height would look better.  The painted image will repeat if the content exceeds the div's dimensions.  If you set `background-repeat` to `no-repeat`, nothing will be drawn beyond, you will just see the `background-color` on `body`, if any.
+
+
 pseudo element workaround but doesn't work with polyfill
 div covering viewport works sometimes
 redraws on resize
 polyfilled browsers don't redraw on resize - will repeat or just be blank
-polyfill requires overflow: hidden
