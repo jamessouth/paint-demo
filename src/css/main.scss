@@ -4,11 +4,11 @@
   box-sizing: border-box;
 }
 body > div{
-  --stars: 322;
+  --stars: 522;
   min-height: 100vh;
   width: 100%;
   background-image: linear-gradient(black, black);
-  background-image: paint(demo, starss);
+  background-image: paint(demo);
   overflow-x: hidden;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -16,6 +16,8 @@ body > div{
 div div{
   width: 200px;
   height: 200px;
-  background-color: red;
+  background-color: coral;
   margin: 1em auto;
+  text-align: center;
+  font-size: 3em;
 }
