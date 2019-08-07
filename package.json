@@ -13,7 +13,7 @@
     "lint": "eslint ./src/js",
     "dev": "webpack-dev-server",
     "build": "webpack",
-    "prebuild": "rm -f docs/demo.min.js && npx minify src/js/demo.js --out-file docs/demo.min.js"
+    "p36346rebuild": "rm -f docs/demo.min.js && npx minify src/js/demo.js --out-file docs/demo.min.js"
   },
   "repository": {
     "type": "git",

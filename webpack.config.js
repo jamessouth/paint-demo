@@ -8,10 +8,10 @@ const ScriptExtHTMLWebpackPlugin = require('script-ext-html-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
-  devtool: 'source-map',
-  // mode: 'development',
-  // devtool: 'inline-source-map',
+  // mode: 'production',
+  // devtool: 'source-map',
+  mode: 'development',
+  devtool: 'inline-source-map',
   entry: {
     main: './src/js/index.js',
   },
@@ -70,7 +70,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: [
       '**/*',
-      '!demo.min.js',
+      // '!demo.min.js',
     ] }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
