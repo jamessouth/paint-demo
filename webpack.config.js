@@ -70,16 +70,21 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: [
       '**/*',
-      // '!demo.min.js',
+      '!demo1.min.js',
     ] }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
       chunkFilename: '[name].[contenthash].css',
     }),
     new HTMLWebpackPlugin({
-      template: './src/html/index.html',
+      template: './src/html/index1.html',
       title: 'CSS Paint Demo 1',
       filename: 'demo1.html',
+    }),
+    new HTMLWebpackPlugin({
+      template: './src/html/index2.html',
+      title: 'CSS Paint Demo 2',
+      filename: 'demo2.html',
     }),
     new ScriptExtHTMLWebpackPlugin({
       defaultAttribute: 'async',

@@ -1,11 +1,11 @@
 import '../css/main.scss';
 
 if (CSS.paintWorklet) {
-
-  import(/* webpackChunkName: "paint-worklet" */ './demo').then((demo) => CSS.paintWorklet.addModule(demo));
-
-
-  // CSS.paintWorklet.addModule('./demo.min.js');
+  CSS.paintWorklet.addModule('./demo1.min.js');
+  CSS.paintWorklet.addModule('./demo2.min.js');
 } else {
-  import(/* webpackChunkName: "css-paint-polyfill" */ 'css-paint-polyfill').then(() => CSS.paintWorklet.addModule('./demo.min.js'));
+  import(/* webpackChunkName: "css-paint-polyfill" */ 'css-paint-polyfill').then(() => {
+    CSS.paintWorklet.addModule('./demo1.min.js');
+    CSS.paintWorklet.addModule('./demo2.min.js');
+  });
 }
