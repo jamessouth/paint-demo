@@ -1,4 +1,5 @@
-import '../css/main.scss';
+import '../css/demo1.scss';
+import '../css/demo2.scss';
 
 if (CSS.paintWorklet) {
   CSS.paintWorklet.addModule('./demo1.min.js');

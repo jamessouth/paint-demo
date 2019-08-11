@@ -3,17 +3,17 @@
   padding: 0;
   box-sizing: border-box;
 }
-body > div{
+.bg{
   --stars: 522;
   min-height: 100vh;
   width: 100%;
   background-image: linear-gradient(black, black);
-  background-image: paint(demo);
+  background-image: paint(demo1);
   overflow-x: hidden;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
-div div{
+.bg div{
   width: 200px;
   height: 200px;
   background-color: coral;

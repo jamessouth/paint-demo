@@ -1,4 +1,4 @@
-class Demo {
+class Demo1 {
   static get inputProperties() { return ['--stars']; }
 
   static getDistAlongSide(max) {
@@ -14,21 +14,21 @@ class Demo {
       case 0:
         return [
           0,
-          Demo.getDistAlongSide(height),
+          Demo1.getDistAlongSide(height),
         ];
       case 1:
         return [
-          Demo.getDistAlongSide(width),
+          Demo1.getDistAlongSide(width),
           height,
         ];
       case 2:
         return [
           width,
-          Demo.getDistAlongSide(height),
+          Demo1.getDistAlongSide(height),
         ];
       case 3:
         return [
-          Demo.getDistAlongSide(width),
+          Demo1.getDistAlongSide(width),
           0,
         ];
       default: return undefined;
@@ -49,13 +49,13 @@ class Demo {
 
   paint(ctx, { width, height }, props) { // eslint-disable-line
     const stars = props.get('--stars');
-    
+
     ctx.fillStyle = 'rgb(0, 0, 0)';
     ctx.fillRect(0, 0, width, height);
 
     for (let i = 0; i < stars; i += 1) {
-      ctx.fillStyle = `rgba(255, 255, 255, ${Demo.getTransparency()})`;
-      ctx.fillRect(Demo.getDistAlongSide(width), Demo.getDistAlongSide(height), 1, 1);
+      ctx.fillStyle = `rgba(255, 255, 255, ${Demo1.getTransparency()})`;
+      ctx.fillRect(Demo1.getDistAlongSide(width), Demo1.getDistAlongSide(height), 1, 1);
     }
 
     const ctr = [
@@ -65,15 +65,15 @@ class Demo {
 
     for (let i = 0; i < 700; i += 1) {
       const startSide = i % 4;
-      const endSide = (startSide + Demo.getEndSide()) % 4;
+      const endSide = (startSide + Demo1.getEndSide()) % 4;
       ctx.beginPath();
       ctx.moveTo(...ctr);
-      ctx.lineTo(...Demo.getPoint(endSide, width, height));
-      ctx.lineWidth = Demo.getWidth();
+      ctx.lineTo(...Demo1.getPoint(endSide, width, height));
+      ctx.lineWidth = Demo1.getWidth();
       ctx.lineCap = 'square';
-      ctx.strokeStyle = `rgba(${Demo.getColor(240, 15)}, ${Demo.getColor(240, 15)}, ${Demo.getColor(50, 20)}, .05)`;
+      ctx.strokeStyle = `rgba(${Demo1.getColor(240, 15)}, ${Demo1.getColor(240, 15)}, ${Demo1.getColor(50, 20)}, .05)`;
       ctx.stroke();
     }
   }
 }
-registerPaint('demo', Demo); // eslint-disable-line
+registerPaint('demo1', Demo1); // eslint-disable-line
