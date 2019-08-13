@@ -8,12 +8,12 @@ const ScriptExtHTMLWebpackPlugin = require('script-ext-html-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
-  devtool: 'source-map',
-  // mode: 'development',
-  // devtool: 'inline-source-map',
+  // mode: 'production',
+  // devtool: 'source-map',
+  mode: 'development',
+  devtool: 'inline-source-map',
   entry: {
-    main: './src/js/index.js',
+    demo1: './src/js/index.js',
   },
   output: {
     filename: '[name].[contenthash].js',
@@ -65,15 +65,21 @@ module.exports = {
     runtimeChunk: 'single',
     splitChunks: {
       cacheGroups: {
-        main_css: {
+        demo1_css: {
           test: m => m.identifier().includes('demo1.scss'),
           name: 'demo1_css',
           chunks: 'all',
           enforce: true,
         },
-        fallback_css: {
+        demo2_css: {
           test: m => m.identifier().includes('demo2.scss'),
           name: 'demo2_css',
+          chunks: 'all',
+          enforce: true,
+        },
+        demo3_css: {
+          test: m => m.identifier().includes('demo3.scss'),
+          name: 'demo3_css',
           chunks: 'all',
           enforce: true,
         },
@@ -86,6 +92,7 @@ module.exports = {
       '**/*',
       '!demo1.min.js',
       '!demo2.min.js',
+      '!demo3.min.js',
     ] }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
@@ -100,6 +107,11 @@ module.exports = {
       template: './src/html/index2.html',
       title: 'CSS Paint Demo 2',
       filename: 'demo2.html',
+    }),
+    new HTMLWebpackPlugin({
+      template: './src/html/index3.html',
+      title: 'CSS Paint Demo 3',
+      filename: 'demo3.html',
     }),
     new ScriptExtHTMLWebpackPlugin({
       defaultAttribute: 'async',

@@ -1,0 +1,23 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.shape{
+  // min-height: 100vh;
+  // width: 100%;
+  background-color: #efefef;
+}
+.shape div{
+  width: 600px;
+  height: 600px;
+  background-color: coral;
+  margin: 1em auto;
+
+  -webkit-mask-image: paint(demo3);
+  mask-image: paint(demo3);
+
+
+
+
+}
