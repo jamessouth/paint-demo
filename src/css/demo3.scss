@@ -9,10 +9,14 @@
   background-color: #efefef;
 }
 .shape div{
-  width: 600px;
-  height: 600px;
-  background-color: coral;
-  margin: 1em auto;
+  font-family: 'Bangers', cursive;
+  width: 200px;
+  height: 200px;
+  text-align: center;
+  line-height: 2.3;
+  font-size: 70px;
+  background: radial-gradient(closest-side, #3f87a6, #ebf8e1, #f69d3c);
+  margin: 15% auto 0;
 
   -webkit-mask-image: paint(demo3);
   mask-image: paint(demo3);
