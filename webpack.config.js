@@ -94,6 +94,7 @@ module.exports = {
       '!demo2.min.js',
       '!demo3a.min.js',
       '!demo3b.min.js',
+      '!demo3c.min.js',
     ] }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
