@@ -50,7 +50,8 @@
   // z-index: 25;
   height: 480px;
   width: 520px;
-  background-image: paint(demo3c);
+  -webkit-mask-image: paint(demo3c);
+  mask-image: paint(demo3c);
 
 }
 p{
