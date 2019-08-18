@@ -18,12 +18,12 @@
   // margin: 20% 0;
 }
 #expt{
-  background-color: #191418;
+  // background-color: #191418;
   // background: radial-gradient(closest-side, #3f87a6, #ebf8e1, #f69d3c);
 // display: none;
   z-index: 31;
-  -webkit-mask-image: paint(demo3b);
-  mask-image: paint(demo3b);
+  background-image: paint(demo3b);
+  // mask-image: paint(demo3b);
   // display: none;
 
 }
@@ -54,6 +54,13 @@
   mask-image: paint(demo3c);
 
 }
+#outline{
+  background-color: #282a2c;
+  height: 480px;
+  width: 520px;
+  -webkit-mask-image: paint(demo3d);
+  mask-image: paint(demo3d);
+}
 p{
   position: absolute;
   top: 43px;
@@ -71,7 +78,7 @@ p{
 }
 span{
   position: relative;
-  transform: rotateY(31deg);
+  // transform: rotateY(31deg);
   display: inline-block;
 }
 span:first-of-type{
