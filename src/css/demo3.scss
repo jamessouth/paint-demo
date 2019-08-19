@@ -6,9 +6,15 @@
 .shape{
   min-height: 100vh;
   // width: 100%;
-  background-color: #efefef;
+  background: conic-gradient(black 3deg, red 3deg 15deg, black 15deg 16deg, blue 16deg 19deg, black 19deg 20deg, red 20deg 24deg, black 24deg 25deg, blue 25deg 30deg, black 30deg 31deg, red 31deg 48deg, black 48deg 49deg, blue 49deg 51deg, black 52deg 53deg, red 53deg 84deg, black 84deg 85deg, blue 85deg 87deg, black 87deg 88deg, red 88deg 109deg, black 109deg 110deg, blue 110deg 112deg, black 112deg 113deg, red 126deg 160deg, black 160deg 161deg, blue 161deg 165deg, black 165deg 166deg, red 166deg 209deg, black 209deg 210deg, blue 210deg 215deg, black 215deg 216deg, red 216deg 230deg, black 230deg 231deg, blue 231deg 235deg, black 235deg 236deg, red 236deg 272deg, black 272deg 273deg, blue 273deg 277deg, black 277deg 278deg, red 278deg 318deg, black 318deg 319deg, blue 319deg 325deg, black 325deg 326deg, red 326deg 357deg, black 357deg 358deg, blue 358deg);
 }
 .shape div{
+  // red 16deg 59deg,
+  // black 9deg 10deg,
+  // blue 10deg 15deg,
+  // black 15deg 16deg,
+  // blue 358deg 3deg,
+  // black 15deg 16deg,
   transform: translateX(-50%) translateY(-50%);
   left: 50%;
   position: absolute;
