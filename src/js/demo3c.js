@@ -2,7 +2,6 @@ class Demo3c {
   paint(ctx, { width, height }, props) { // eslint-disable-line
     const yoff = -25;
     const xoff = 35;
-
     ctx.beginPath();
     ctx.moveTo(121 + xoff, 131 + yoff);
     ctx.bezierCurveTo(163 + xoff, 64 + yoff, 178 + xoff, 98 + yoff, 171 + xoff, 111 + yoff);

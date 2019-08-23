@@ -5,8 +5,8 @@ description: Using JS to draw whatever we want, wherever a CSS property takes an
 tags: CSS, JavaScript, Paint, Houdini
 ---
 
-With the new CSS Paint API (aka Houdini, presumably named after the Melvins album  🤘😁), we can use most of the HTML Canvas drawing methods to draw anything we want and use it in any CSS property that takes an image.  Today I want to show how I used Houdini in my newly rebuilt portfolio site* to create generative border images and speech-bubble-shaped divs.  I will also cover using Houdini with webpack and Babel and some of the snags you might hit along the way.
-*<small>Not currently polyfilled - you will see a fallback unless you view it with Chrome.</small>
+With the new CSS Paint API (aka Houdini, presumably named after the Melvins album  🤘😁), we can use most of the HTML Canvas drawing methods to draw anything we want and use it in any CSS property that takes an image.  Today I want to show how I used Houdini in my newly rebuilt portfolio site* to generate border images and speech-bubble-shaped divs.  I will also cover using the polyfill, using Houdini with webpack and Babel, and some of the snags you might hit along the way.
+*<small>Not currently polyfilled - you will see a fallback unless you view it with Chrome</small>
 
 The basics of using Houdini are as follows:  for any CSS property that takes an image, such as background-image, enter `paint(workletName)` as the value.  In a JS file, create a class for your worklet.  At the bottom of the file, call the `registerPaint` method with the `workletName` and the class name as the arguments.  Then, in your main JS file or webpack entry point, feature detect for `CSS.paintWorklet`.  If it's there, which right now is only in Chrome, call `CSS.paintWorklet.addModule('./myWorkletClassFile.js')`; otherwise, after `npm i -S css-paint-polyfill`, we can dynamically import the polyfill so it will be a separate webpack chunk, then call `addModule`.  Now we are ready to develop our class and generate some art!
 
@@ -26,16 +26,17 @@ if (CSS.paintWorklet) {
 } else {
   import(/* webpackChunkName: "css-paint-polyfill" */ 'css-paint-polyfill').then(() => {
     CSS.paintWorklet.addModule('./demo1.min.js');
-    CSS.paintWorklet.addModule('./demo2.min.js');// polyfill doesn't work with more than one usage of paint on a stylesheet 😢 so demo3 is Chrome only
+    CSS.paintWorklet.addModule('./demo2.min.js');
+// polyfill doesn't work if you use paint more than once a stylesheet 😢 so demo3 is Chrome only
   });
 }
 ```
 ##Generating a page's background
 
 
-So let's start with generating a page's background.  Demo 1 is live here.
+So let's start with generating a page's background.  Demo 1 is live here*.  Some simple HTML:
 ```html
-  //index1.html
+  <!--index1.html -->
   <body>
     <div class="bg">
       <div>a</div>
@@ -45,7 +46,9 @@ So let's start with generating a page's background.  Demo 1 is live here.
     </div>
   </body>
 ```
-Note that the polyfill doesn't always run, and when it doesn't, you just get the background-color on the body, so it might take a few reloads to load properly.  Also, the polyfill works by creating an image, so if you resize or re-orient, you will get repeats or cut-offs of the original image from when the page loaded.  Repeats can be prevented with `background-repeat` set to `no-repeat`; you will just see the background-color on the body.  Since Chrome has some native support for Houdini, when you resize or re-orient, the worklet runs again and redraws to fit the new dimensions, so watch out for that if you write a complex paint function.
+*<small>Note: the polyfill does not always run - you may need to reload a few times</small>
+
+If the polyfill doesn't run, you will see the background-color on the body.  The polyfill works by creating an image, so if you resize or re-orient, you will get repeats or cut-offs of the original image formed when the page loaded.  Repeats can be prevented with `background-repeat` set to `no-repeat`; you will just see the background-color on the body.  Since Chrome has some native support for Houdini, when you resize or re-orient, the worklet runs again and redraws to fit the new dimensions, so watch out for that if you write a complex paint function.
 
 The fake placeholder content is in a div that covers the page which will hold the painted background.  This is a workaround for this bug in Chrome which breaks CSS custom properties set on the `body` (also apparently `html` and `:root`), at least with regard to accessing them in a paint worklet.  The CSS is :
 ```scss
@@ -114,17 +117,18 @@ class Demo1 {
 }
 registerPaint('demo1', Demo1);//called with worklet name and class name
 ```
-Now we are ready to build!  As far as I can tell, the Worklet interface only accepts ES6 classes, so a transpiled-to-ES5-function worklet doesn't work, and neither does a class wrapped in a function by webpack (if there's a way to just minify in webpack please answer my question on SO).  So, I have been processing them outside of webpack.  This works fine but makes iterating in development a little slower.  Install the `babel-minify` package as a dev dependency, then in package.json minify it and place in your dist folder:
+Now we are ready to build!  As far as I can tell, the Worklet interface only accepts ES6 classes, so a transpiled-to-ES5-function worklet doesn't work, and neither does a class wrapped in a function by webpack (if there's a way to just minify in webpack please answer my question on SO).  So, I have been processing them outside of webpack.  This works fine but makes iterating in development a little slower.  Install the `babel-minify` package as a dev dependency, then in package.json minify your worklet files and place them in your dist folder:
 ```
   //package.json
   "scripts": {
     "lint": "eslint ./src/js",
     "dev": "webpack-dev-server",
     "build": "webpack",
-    "prebuild": "rm -f dist/demo.min.js && npx minify src/js/demo.js --out-file dist/demo.min.js..."// && minify the other worklets etc...
+    "prebuild": "rm -f dist/demo.min.js && npx minify src/js/demo.js --out-file dist/demo.min.js..."
+// && minify the other worklets etc...
   }
 ```
-In my webpack config, I use the `CleanWebpackPlugin` and delete everything except `demo.min.js`.
+In my webpack config, I use the `CleanWebpackPlugin` and delete everything except the minified worklet files:
 ```javascript
   //webpack.config.js
   plugins: [
@@ -138,7 +142,7 @@ In my webpack config, I use the `CleanWebpackPlugin` and delete everything excep
       '!demo3d.min.js',
     ] }),
 ```
-To develop the worklet I then copy it to the `dist` folder and name it `demo.min.js`.  Now when I start `webpack-dev-server`, `/dist` is wiped except for the worklet and the development workflow is normal except for having to manually refresh the browser to reflect a change to the worklet.  When you are done, copy the worklet back to source (renaming appropriately) and build for production.  The prebuild script will minify the worklet and webpack will take care of the rest!
+To develop the worklet I then copy it to the `dist` folder and name it `demo.min.js` since that is the name I'm using elsewhere.  Now when I start `webpack-dev-server`, `/dist` is wiped except for the worklet and the development workflow is normal except for having to manually refresh the browser to reflect a change to the worklet.  When you are done, copy the worklet back to source (renaming to `demo.js`) and build for production.  The prebuild script will minify the worklet and webpack will take care of the rest!
 
 ##Generating border images
 

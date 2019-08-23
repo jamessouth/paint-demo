@@ -2,7 +2,7 @@ class Demo3a {
   paint(ctx, { width, height }, props) { // eslint-disable-line
     const xoff = 35;
     const yoff = -30;
-    ctx.beginPath();//red
+    ctx.beginPath(); // red
     ctx.moveTo(139 + xoff, 156 + yoff);
     ctx.bezierCurveTo(140 + xoff, 164 + yoff, 151 + xoff, 162 + yoff, 154 + xoff, 155 + yoff);
     ctx.bezierCurveTo(172 + xoff, 185 + yoff, 190 + xoff, 166 + yoff, 195 + xoff, 152 + yoff);
@@ -21,13 +21,13 @@ class Demo3a {
     ctx.bezierCurveTo(74 + xoff, 260 + yoff, 85 + xoff, 231 + yoff, 85 + xoff, 208 + yoff);
     ctx.bezierCurveTo(121 + xoff, 218 + yoff, 138 + xoff, 191 + yoff, 139 + xoff, 171 + yoff);
     ctx.lineTo(139 + xoff, 160 + yoff);
-  	ctx.fillStyle = '#ea2916';
-  	ctx.fill();
-  	ctx.lineWidth = '5';
-  	ctx.strokeStyle = '#28252E';
-  	ctx.stroke();
+    ctx.fillStyle = '#ea2916';
+    ctx.fill();
+    ctx.lineWidth = '5';
+    ctx.strokeStyle = '#28252E';
+    ctx.stroke();
 
-    ctx.beginPath();//yellow
+    ctx.beginPath(); // yellow
     ctx.moveTo(23 + xoff, 117 + yoff);
     ctx.bezierCurveTo(44 + xoff, 133 + yoff, 113 + xoff, 190 + yoff, 122 + xoff, 185 + yoff);
     ctx.bezierCurveTo(129 + xoff, 209 + yoff, 205 + xoff, 248 + yoff, 193 + xoff, 239 + yoff);
@@ -69,7 +69,7 @@ class Demo3a {
     ctx.stroke();
     ctx.lineWidth = '5';
 
-    ctx.beginPath();//white
+    ctx.beginPath(); // white
     ctx.moveTo(123 + xoff, 176 + yoff);
     ctx.lineTo(171 + xoff, 218 + yoff);
     ctx.lineTo(182 + xoff, 149 + yoff);
