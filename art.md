@@ -27,14 +27,13 @@ if (CSS.paintWorklet) {
   import(/* webpackChunkName: "css-paint-polyfill" */ 'css-paint-polyfill').then(() => {
     CSS.paintWorklet.addModule('./demo1.min.js');
     CSS.paintWorklet.addModule('./demo2.min.js');
-// polyfill doesn't work if you use paint more than once a stylesheet 😢 so demo3 is Chrome only
+// polyfill doesn't seem to work if you use paint more than once in a stylesheet 😢 so demo3 is Chrome only
   });
 }
 ```
 ##Generating a page's background
 
-
-So let's start with generating a page's background.  Demo 1 is live here*.  Some simple HTML:
+So let's start with generating a page's background.  Demo 1 is live here.
 ```html
   <!--index1.html -->
   <body>
@@ -45,10 +44,14 @@ So let's start with generating a page's background.  Demo 1 is live here*.  Some
       <div>n</div>
     </div>
   </body>
+  <style>
+    .bg{
+      background-image: linear-gradient(black, black);
+      background-image: paint(demo1);
+    }
+  </style>
 ```
-*<small>Note: the polyfill does not always run - you may need to reload a few times</small>
-
-If the polyfill doesn't run, you will see the background-color on the body.  The polyfill works by creating an image, so if you resize or re-orient, you will get repeats or cut-offs of the original image formed when the page loaded.  Repeats can be prevented with `background-repeat` set to `no-repeat`; you will just see the background-color on the body.  Since Chrome has some native support for Houdini, when you resize or re-orient, the worklet runs again and redraws to fit the new dimensions, so watch out for that if you write a complex paint function.
+If the polyfill doesn't run, you will see the background-color on the body.  It works by creating an image, so if you resize or re-orient, you will get repeats or cut-offs of the original image formed when the page loaded.  Repeats can be prevented with `background-repeat` set to `no-repeat`; you will just see the background-color on the body.  Since Chrome has some native support for Houdini, when you resize or re-orient, the worklet runs again and redraws to fit the new dimensions, so watch out for that if you write a complex paint function.
 
 The fake placeholder content is in a div that covers the page which will hold the painted background.  This is a workaround for this bug in Chrome which breaks CSS custom properties set on the `body` (also apparently `html` and `:root`), at least with regard to accessing them in a paint worklet.  The CSS is :
 ```scss
