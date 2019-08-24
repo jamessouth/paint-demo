@@ -8,10 +8,10 @@ const ScriptExtHTMLWebpackPlugin = require('script-ext-html-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
-  devtool: 'source-map',
-  // mode: 'development',
-  // devtool: 'inline-source-map',
+  // mode: 'production',
+  // devtool: 'source-map',
+  mode: 'development',
+  devtool: 'inline-source-map',
   entry: {
     demo1: './src/js/index.js',
   },
@@ -83,6 +83,12 @@ module.exports = {
           chunks: 'all',
           enforce: true,
         },
+        demo4_css: {
+          test: m => m.identifier().includes('demo4.scss'),
+          name: 'demo4_css',
+          chunks: 'all',
+          enforce: true,
+        },
       },
       chunks: 'all',
     },
@@ -96,6 +102,7 @@ module.exports = {
       '!demo3b.min.js',
       '!demo3c.min.js',
       '!demo3d.min.js',
+      '!demo4.min.js',
     ] }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
@@ -115,6 +122,11 @@ module.exports = {
       template: './src/html/index3.html',
       title: 'CSS Paint Demo 3',
       filename: 'demo3.html',
+    }),
+    new HTMLWebpackPlugin({
+      template: './src/html/index4.html',
+      title: 'CSS Paint Demo 4',
+      filename: 'demo4.html',
     }),
     new ScriptExtHTMLWebpackPlugin({
       defaultAttribute: 'async',

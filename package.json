@@ -13,7 +13,7 @@
     "lint": "eslint ./src/js",
     "dev": "webpack-dev-server",
     "build": "webpack",
-    "prebuild": "rm -f docs/demo1.min.js docs/demo2.min.js docs/demo3a.min.js docs/demo3b.min.js docs/demo3c.min.js docs/demo3d.min.js && npx minify src/js/demo1.js --out-file docs/demo1.min.js && npx minify src/js/demo2.js --out-file docs/demo2.min.js && npx minify src/js/demo3a.js --out-file docs/demo3a.min.js && npx minify src/js/demo3b.js --out-file docs/demo3b.min.js && npx minify src/js/demo3c.js --out-file docs/demo3c.min.js && npx minify src/js/demo3d.js --out-file docs/demo3d.min.js"
+    "prebuild": "rm -f docs/demo1.min.js docs/demo2.min.js docs/demo3a.min.js docs/demo3b.min.js docs/demo3c.min.js docs/demo3d.min.js && npx minify src/js/demo1.js --out-file docs/demo1.min.js && npx minify src/js/demo2.js --out-file docs/demo2.min.js && npx minify src/js/demo3a.js --out-file docs/demo3a.min.js && npx minify src/js/demo3b.js --out-file docs/demo3b.min.js && npx minify src/js/demo3c.js --out-file docs/demo3c.min.js && npx minify src/js/demo3d.js --out-file docs/demo3d.min.js && npx minify src/js/demo4.js --out-file docs/demo4.min.js"
   },
   "repository": {
     "type": "git",
