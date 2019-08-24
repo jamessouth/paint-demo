@@ -35,10 +35,6 @@ class Demo1 {
     }
   }
 
-  static getEndSide() {
-    return Math.floor(Math.random() * 3) + 1;
-  }
-
   static getColor(base, range) {
     return base + Math.floor(Math.random() * range + 1);
   }
@@ -64,8 +60,7 @@ class Demo1 {
     ];
 
     for (let i = 0; i < 700; i += 1) {
-      const startSide = i % 4;
-      const endSide = (startSide + Demo1.getEndSide()) % 4;
+      const endSide = i % 4;
       ctx.beginPath();
       ctx.moveTo(...ctr);
       ctx.lineTo(...Demo1.getPoint(endSide, width, height));
