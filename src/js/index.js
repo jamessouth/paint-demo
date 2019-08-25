@@ -1,48 +1,43 @@
-const demo1 = document.querySelector('.bg');
-const demo2 = document.querySelector('.border');
-const demo3 = document.querySelector('.shape');
-const demo4 = document.querySelector('.cache');
-
-
-// import '../css/demo1.scss';
-// import '../css/demo2.scss';
-// import '../css/demo3.scss';
-// import '../css/demo4.scss';
+const demo = document.title.match(/\d/)[0];
 
 if (CSS.paintWorklet) {
-  // switch (demo) {
-  //   case demo1:
-  //     CSS.paintWorklet.addModule('./demo1.min.js').then(import(/* webpackChunkName: "demo1scss" */ '../css/demo1.scss'));
-  //   case demo4:
-  //     CSS.paintWorklet.addModule('./demo4.min.js').then(import(/* webpackChunkName: "demo4scss" */ '../css/demo4.scss'));
-  //
-  // }
-  // CSS.paintWorklet.addModule('./demo2.min.js');
-  // CSS.paintWorklet.addModule('./demo3a.min.js');
-  // CSS.paintWorklet.addModule('./demo3b.min.js');
-  // CSS.paintWorklet.addModule('./demo3c.min.js');
-  // CSS.paintWorklet.addModule('./demo3d.min.js');
-  // CSS.paintWorklet.addModule('./demo4.min.js');
+  switch (demo) {
+    case '1':
+      import(/* webpackChunkName: "demo1scss" */ '../css/demo1.scss').then(() => CSS.paintWorklet.addModule('./demo1.min.js'));
+      break;
+    case '2':
+      import(/* webpackChunkName: "demo2scss" */ '../css/demo2.scss').then(() => CSS.paintWorklet.addModule('./demo2.min.js'));
+      break;
+    case '3':
+      import(/* webpackChunkName: "demo3scss" */ '../css/demo3.scss').then(() => {
+        CSS.paintWorklet.addModule('./demo3a.min.js');
+        CSS.paintWorklet.addModule('./demo3b.min.js');
+        CSS.paintWorklet.addModule('./demo3c.min.js');
+        CSS.paintWorklet.addModule('./demo3d.min.js');
+      });
+      break;
+    case '4':
+      import(/* webpackChunkName: "demo4scss" */ '../css/demo4.scss').then(() => CSS.paintWorklet.addModule('./demo4.min.js'));
+      break;
+    default:
+      import(/* webpackChunkName: "demo2scss" */ '../css/demo2.scss').then(() => CSS.paintWorklet.addModule('./demo2.min.js'));
+  }
 } else {
   import(/* webpackChunkName: "css-paint-polyfill" */ 'css-paint-polyfill').then(() => {
     switch (demo) {
-      case demo1:
-        CSS.paintWorklet.addModule('./demo1.min.js').then(import(/* webpackChunkName: "demo1scss" */ '../css/demo1.scss'));
-      case demo4:
-        CSS.paintWorklet.addModule('./demo4.min.js').then(import(/* webpackChunkName: "demo4scss" */ '../css/demo4.scss'));
-
+      case '1':
+        import(/* webpackChunkName: "demo1scss" */ '../css/demo1.scss').then(() => CSS.paintWorklet.addModule('./demo1.min.js'));
+        break;
+      case '2':
+        import(/* webpackChunkName: "demo2scss" */ '../css/demo2.scss').then(() => CSS.paintWorklet.addModule('./demo2.min.js'));
+        break;
+      case '3':
+        return undefined;
+      case '4':
+        import(/* webpackChunkName: "demo4scss" */ '../css/demo4.scss').then(() => CSS.paintWorklet.addModule('./demo4.min.js'));
+        break;
+      default: return undefined;
     }
-
-
-    // CSS.paintWorklet.addModule('./demo1.min.js');
-    // CSS.paintWorklet.addModule('./demo2.min.js');
-    // CSS.paintWorklet.addModule('./demo4.min.js');
+    return undefined;
   });
 }
-
-// console.log(demo1, demo4);
-// if (demo4) {
-//   console.log('4');
-// } else {
-//   console.log('1');
-// }

@@ -8,10 +8,10 @@ const ScriptExtHTMLWebpackPlugin = require('script-ext-html-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-  // mode: 'production',
-  // devtool: 'source-map',
-  mode: 'development',
-  devtool: 'inline-source-map',
+  mode: 'production',
+  devtool: 'source-map',
+  // mode: 'development',
+  // devtool: 'inline-source-map',
   entry: {
     demo1: './src/js/index.js',
   },
@@ -64,32 +64,6 @@ module.exports = {
     ],
     runtimeChunk: 'single',
     splitChunks: {
-      cacheGroups: {
-        demo1_css: {
-          test: m => m.identifier().includes('demo1.scss'),
-          name: 'demo1_css',
-          chunks: 'all',
-          enforce: true,
-        },
-        demo2_css: {
-          test: m => m.identifier().includes('demo2.scss'),
-          name: 'demo2_css',
-          chunks: 'all',
-          enforce: true,
-        },
-        demo3_css: {
-          test: m => m.identifier().includes('demo3.scss'),
-          name: 'demo3_css',
-          chunks: 'all',
-          enforce: true,
-        },
-        demo4_css: {
-          test: m => m.identifier().includes('demo4.scss'),
-          name: 'demo4_css',
-          chunks: 'all',
-          enforce: true,
-        },
-      },
       chunks: 'all',
     },
   },
