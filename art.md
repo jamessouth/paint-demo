@@ -1,32 +1,24 @@
 ---
-title: Generative Element Backgrounds with the CSS Paint (Houdini) API
+title: Generating Shapes and Images with the CSS Paint (Houdini) API
 published: false
-description: Using JS to draw whatever we want, wherever a CSS property takes an image
+description: Using JS to draw in any CSS property that takes an image
 tags: CSS, JavaScript, Paint, Houdini
 ---
 
 With the new CSS Paint API (aka Houdini, presumably named after the Melvins album  🤘😁), we can use most of the HTML Canvas drawing methods to draw anything we want and use it in any CSS property that takes an image.  Today I want to show how I used Houdini in my newly rebuilt portfolio site* to generate border images and speech-bubble-shaped divs.  I will also cover using the polyfill, using Houdini with webpack and Babel, and some of the snags you might hit along the way.
 *<small>Not currently polyfilled - you will see a fallback unless you view it with Chrome</small>
 
-The basics of using Houdini are as follows:  for any CSS property that takes an image, such as background-image, enter `paint(workletName)` as the value.  In a JS file, create a class for your worklet.  At the bottom of the file, call the `registerPaint` method with the `workletName` and the class name as the arguments.  Then, in your main JS file or webpack entry point, feature detect for `CSS.paintWorklet`.  If it's there, which right now is only in Chrome, call `CSS.paintWorklet.addModule('./myWorkletClassFile.js')`; otherwise, after `npm i -S css-paint-polyfill`, we can dynamically import the polyfill so it will be a separate webpack chunk, then call `addModule`.  Now we are ready to develop our class and generate some art!
+The basics of using Houdini are as follows:  for any CSS property that takes an image, such as background-image, enter `paint(workletName)` as the value.  In a JS file, create an ES6 class for your worklet.  In the same file, call the `registerPaint` method with the `workletName` and the class name as the arguments.  Then, in your main JS file or webpack entry point, feature detect for `CSS.paintWorklet`.  If it's there, which right now is only in Chrome, call `CSS.paintWorklet.addModule('./myWorkletClassFile.js')`; otherwise, after `npm i -S css-paint-polyfill`, we can dynamically import the polyfill so it will be a separate webpack chunk, then call `addModule`.  Now we are ready to develop our class and generate some art!
 
 ```javascript
 //index.js, webpack entry point
-import '../css/demo1.scss';
-import '../css/demo2.scss';
-import '../css/demo3.scss';
+import '../css/demo.scss';
 
 if (CSS.paintWorklet) {
-  CSS.paintWorklet.addModule('./demo1.min.js');
-  CSS.paintWorklet.addModule('./demo2.min.js');
-  CSS.paintWorklet.addModule('./demo3a.min.js');
-  CSS.paintWorklet.addModule('./demo3b.min.js');
-  CSS.paintWorklet.addModule('./demo3c.min.js');
-  CSS.paintWorklet.addModule('./demo3d.min.js');
+  CSS.paintWorklet.addModule('./demo.min.js');
 } else {
   import(/* webpackChunkName: "css-paint-polyfill" */ 'css-paint-polyfill').then(() => {
-    CSS.paintWorklet.addModule('./demo1.min.js');
-    CSS.paintWorklet.addModule('./demo2.min.js');
+    CSS.paintWorklet.addModule('./demo.min.js');
 // polyfill doesn't seem to work if you use paint more than once in a stylesheet 😢 so demo3 is Chrome only
   });
 }
@@ -44,6 +36,7 @@ So let's start with generating a page's background.  Demo 1 is live here.
       <div>n</div>
     </div>
   </body>
+<!--a fallback for no support or polyfill, then calling paint with demo1 worklet-->
   <style>
     .bg{
       background-image: linear-gradient(black, black);
@@ -51,19 +44,19 @@ So let's start with generating a page's background.  Demo 1 is live here.
     }
   </style>
 ```
-If the polyfill doesn't run, you will see the background-color on the body.  It works by creating an image, so if you resize or re-orient, you will get repeats or cut-offs of the original image formed when the page loaded.  Repeats can be prevented with `background-repeat` set to `no-repeat`; you will just see the background-color on the body.  Since Chrome has some native support for Houdini, when you resize or re-orient, the worklet runs again and redraws to fit the new dimensions, so watch out for that if you write a complex paint function.
+Normally I wouldn't have a `<style>` tag in the HTML, but there is some kind of caching issue when `paint` declarations are made in SCSS, at least for worklets that run on page load.  To see what I mean, check out Demo 4 in Chrome - the page fails to load every other time you hit reload 😢.
 
-The fake placeholder content is in a div that covers the page which will hold the painted background.  This is a workaround for this bug in Chrome which breaks CSS custom properties set on the `body` (also apparently `html` and `:root`), at least with regard to accessing them in a paint worklet.  The CSS is :
+What I believe to be the same caching issue also causes problems for me on Firefox - without dev tools open and disable cache checked, the polyfill almost never runs 😭.  This could be due to the way I have my demo repo set up, or the hosting on GitHub.  The polyfill is pretty reliable on Edge and Safari in my testing.
+
+You will see the background-color on the body when the polyfill doesn't run.  It works by creating an image, so if you resize or re-orient, you will get repeats or cut-offs of the original image formed when the page loaded.  Repeats can be prevented with `background-repeat` set to `no-repeat`; you will just see the background-color on the body.  Since Chrome has some native support for Houdini, when you resize or re-orient, the worklet runs again and redraws to fit the new dimensions, so watch out for that if you write a complex paint function.
+
+The fake placeholder content in Demo 1 is in a div which will hold the painted background and cover the page.  This is a workaround for this bug in Chrome which breaks CSS custom properties set on the `body` (also apparently `html` and `:root`), at least with regard to accessing them in a paint worklet.  The CSS is :
 ```scss
 //demo1.scss
 .bg{
   --stars: 522;
   min-height: 100vh;
   width: 100%;
-  background-image: linear-gradient(black, black);//fallback if paint not supported or polyfilled
-  background-image: paint(demo1);//calling paint with demo worklet
-  overflow-x: hidden;//discovered by accident but polyfill doesn't work without it,
-  //or perhaps other properties, being present
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
@@ -76,7 +69,7 @@ The fake placeholder content is in a div that covers the page which will hold th
   font-size: 3em;
 }
 ```
-A second workaround for the Chrome bug is to use pseudo-content on the body, but then the polyfill doesn't work.  A third workaround would be to set custom properties on the body anyway, then in the worklet, test for the presence of props, and if they're not there, as will be the case with Chrome, set a default value.  Anyway, let's get to the worklet!
+A second workaround for the Chrome bug is to use pseudo-content on the body, but then the polyfill doesn't work.  A third workaround would be to set custom properties on the body anyway, then in the worklet, test for the presence of props.  If they're not there (as will be the case with Chrome), set a default value.  Anyway, let's get to the worklet!
 
 In our worklet class we can create static helper methods for use in the `paint` method, where we do our drawing.  The `paint` method takes 1 to 4 arguments: the canvas context (`ctx`) on which you call the drawing methods, the dimensions of the element you are drawing on, which we can just destructure as `{ width, height }`, `props` which gives you access to CSS custom properties, and lastly an `args` array that holds arguments passed in when you call the paint worklet from CSS, like `paint(workletName, arg1, arg2)`.  As of right now there is no support anywhere for args 😭.
 ```javascript
@@ -127,7 +120,7 @@ Now we are ready to build!  As far as I can tell, the Worklet interface only acc
     "lint": "eslint ./src/js",
     "dev": "webpack-dev-server",
     "build": "webpack",
-    "prebuild": "rm -f dist/demo.min.js && npx minify src/js/demo.js --out-file dist/demo.min.js..."
+    "prebuild": "rm -f dist/demo1.min.js && npx minify src/js/demo1.js --out-file dist/demo1.min.js..."
 // && minify the other worklets etc...
   }
 ```
@@ -138,15 +131,10 @@ In my webpack config, I use the `CleanWebpackPlugin` and delete everything excep
     new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: [
       '**/*',
       '!demo1.min.js',
-      '!demo2.min.js',
-      '!demo3a.min.js',
-      '!demo3b.min.js',
-      '!demo3c.min.js',
-      '!demo3d.min.js',
+      //other worklet files...
     ] }),
 ```
-To develop the worklet I then copy it to the `dist` folder and name it `demo.min.js` since that is the name I'm using elsewhere.  Now when I start `webpack-dev-server`, `/dist` is wiped except for the worklet and the development workflow is normal except for having to manually refresh the browser to reflect a change to the worklet.  When you are done, copy the worklet back to source (renaming to `demo.js`) and build for production.  The prebuild script will minify the worklet and webpack will take care of the rest!
-
+To develop the worklet I then copy it to the `dist` folder and name it `demo1.min.js` since that is the name I'm using elsewhere.  Now when I start `webpack-dev-server`, `/dist` is wiped except for the worklet and the development workflow is normal except for having to manually refresh the browser to reflect a change to the worklet.  When you are done, copy the worklet back to source (renaming to `demo1.js`) and build for production.  The prebuild script will minify the worklet and webpack will take care of the rest!
 ##Generating border images
 
 Demo 2 has a similar structure to Demo 1, just some dummy content:
@@ -158,6 +146,12 @@ Demo 2 has a similar structure to Demo 1, just some dummy content:
     <div>c</div>
     <div>d</div>
   </body>
+  <style>
+    .border div{
+      border-image-source: linear-gradient(blue, blue);
+      border-image-source: paint(demo2);
+    }
+  </style>
 ```
 It is styled similarly except we are using Houdini to generate border images:
 ```scss
@@ -178,13 +172,12 @@ It is styled similarly except we are using Houdini to generate border images:
   font-size: 3em;
   --lines: 343;
   border-image: 82 / 42px / 14;
-  border-image-source: linear-gradient(blue, blue);//fallback
-  border-image-source: paint(demo2);
   border-style: solid;
 }
 ```
 Just drawing a bunch of lines that form the image we set as the border image source:
 ```javascript
+//demo2.js
 class Demo2 {
   static get inputProperties() { return ['--lines']; }//CSS custom prop
 
@@ -210,7 +203,7 @@ registerPaint('demo2', Demo2);
 ```
 ##Generating arbitrarily-shaped elements
 
-Lastly, we can use Houdini to carve any shape out of a div with the `mask-image` property.  Any element we do this to will still occupy a rectangle in the CSS box model of course, but within its box we can achieve any look we want.  For this third demo, I went a little crazy:  I re-created the POP! explosion lithograph Roy Lichtenstein made for the cover of the April 25, 1966 issue of *Newsweek*.  This one only works in Chrome because the polyfill does not like multiple `paint` values in a single stylesheet.
+We can use Houdini to carve any shape out of a div with the `mask-image` property.  Any element we do this to will still occupy a rectangle in the CSS box model of course, but within its box we can achieve any look we want.  For this third demo, I went a little crazy:  I re-created the POP! explosion lithograph Roy Lichtenstein made for the cover of the April 25, 1966 issue of *Newsweek*.  This one only works in Chrome because the polyfill does not like multiple `paint` values in a single stylesheet.
 ```html
   <!--index3.html -->
   <body class="shape">
@@ -221,33 +214,38 @@ Lastly, we can use Houdini to carve any shape out of a div with the `mask-image`
     <div id="blue"></div>
     <div id="outline"></div>
   </body>
+  <style>
+    #expt{
+      -webkit-mask-image: paint(demo3b);
+      mask-image: paint(demo3b);
+    }
+    #pop{
+      background-image: paint(demo3a);
+    }
+    #blue{
+      -webkit-mask-image: paint(demo3c);
+      mask-image: paint(demo3c);
+    }
+    #outline{
+      -webkit-mask-image: paint(demo3d);
+      mask-image: paint(demo3d);
+    }
+  </style>
 ```
-In the body we have divs for the blue cloud, its outline, the red/white/yellow explosion with the word POP, and the exclamation point.  I'll link to the repo here and just show the styles for applying a mask image:
+In the body we have divs for the blue cloud, its outline, the red/white/yellow explosion with the word POP, and the exclamation point.  I'll link to the repo again here since the remaining styles are long.
+
+To help draw these shapes I used this tool which generates the draw instructions and adds the x- and y-offsets, which I then used to position the shape within the div.  As you can see, drawing a mask is the same as just drawing an image and in this case isn't totally necessary, I just wanted a cool demonstration of masking 😜.
+##More on the polyfill
+
+One last thing I wanted to show with the polyfill was that calling `paint` in your CSS before other declarations seems to work better than putting it just anywhere.  I made Demo 4 to show that there is some caching issue when `paint` is called in SCSS, but also to say that if other declarations come before it the polyfill doesn't run as often, so you just get the body's background color.
 ```scss
-//demo3.scss
-#outline{
-  background-color: #282a2c; // color the div
-  -webkit-mask-image: paint(demo3d); // describe what shape we want to see
-  mask-image: paint(demo3d);
+//demo4.scss
+.cache{
+  background-image: linear-gradient(black, black);
+  background-image: paint(demo4);
+  --rays: 582;
+  min-height: 100vh;
+  width: 100%;
 }
 ```
-
-```javascript
-//demo3d.js
-class Demo3d {
-  paint(ctx, { width, height }, props) {
-    const yoff = -25;
-    const xoff = 35;
-    ctx.beginPath();
-    ctx.moveTo(121 + xoff, 131 + yoff);
-    ctx.bezierCurveTo(163 + xoff, 64 + yoff, 178 + xoff, 98 + yoff, 171 + xoff, 111 + yoff);
-
-    // lots of bezier curves...
-
-    ctx.lineWidth = '4';
-    ctx.stroke();
-  }
-}
-registerPaint('demo3d', Demo3d);
-```
-To help draw these shapes I used this tool which generates the draw instructions and adds the x- and y-offsets, which I then used to position the shape within the div.  As you can see, drawing a mask is the same as just drawing an image and in this case isn't totally necessary, I just wanted a cool demonstration of masking 😜.  
+Before I discovered this placement made a difference, it took seemingly random declarations like `display: block` (even though that is already the default on a div) to get the polyfill to run 😖😕😵.  
