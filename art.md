@@ -47,7 +47,7 @@ So let's start with generating a page's background.  Demo 1 is [live here](https
 ```
 Normally I wouldn't have a `<style>` tag in the HTML, but there is some kind of caching issue when `paint` declarations are made in SCSS, at least for worklets that run on page load.  To see what I mean, check out [Demo 4](https://jamessouth.github.io/paint-demo/demo4.html) in Chrome - the page fails to load every other time you hit reload 😢.
 
-What I believe to be the same caching issue also causes problems for me on Firefox - without dev tools open and Disable Cache checked, the polyfill almost never runs 😭.  This could be due to the way I have my demo repo set up, the hosting on GitHub, or my Firefox settings.  The polyfill is pretty reliable on Edge and Safari in my testing.
+What I believe to be the same caching issue also causes problems for me on Firefox - without dev tools open and Disable Cache checked, the polyfill almost never runs 😭.  This could be due to the way I have my demo repo set up, or the hosting on GitHub.  The polyfill is pretty reliable on Edge and Safari in my testing.
 
 You will see the background-color on the body when the polyfill doesn't run, not the gradient fallback.  The polyfill works by creating an image, so if you resize or re-orient, you will get repeats or cut-offs of the original image formed when the page loaded.  Repeats can be prevented with `background-repeat` set to `no-repeat`; you will just see the background-color on the body.  Since Chrome has some native support for Houdini, when you resize or re-orient, the worklet runs again and redraws to fit the new dimensions, so watch out for that if you write a complex paint function.
 
@@ -160,7 +160,7 @@ Demo 2 has a similar structure to Demo 1, just some dummy content:
     }
   </style>
 ```
-It is styled similarly except we are using Houdini to generate border images:
+It is styled similarly except we are using Houdini to generate [border images](https://developer.mozilla.org/en-US/docs/Web/CSS/border-image):
 ```scss
 //demo2.scss
 .border{
@@ -178,7 +178,7 @@ It is styled similarly except we are using Houdini to generate border images:
   text-align: center;
   font-size: 3em;
   --lines: 343;
-  border-image: 82 / 42px / 14;
+  border-image: 82 / 42px / 14;//short for border-image-slice, -width, -outset
   border-style: solid;
 }
 ```
@@ -208,11 +208,12 @@ class Demo2 {
 }
 registerPaint('demo2', Demo2);
 ```
+In my portfolio site, I only used this technique for focus styles and only for a bottom border; here are the [SCSS](https://github.com/jamessouth/portfolio/blob/master/src/css/main.scss#L182) and [worklet](https://github.com/jamessouth/portfolio/blob/master/src/js/BorderPaint.js).
 ##Generating arbitrarily-shaped elements
 
-![Demo 3](https://raw.githubusercontent.com/jamessouth/paint-demo/master/images/demo3.jpg)<figcaption>Demo 3</figcaption>
+![Demo 3](https://raw.githubusercontent.com/jamessouth/paint-demo/master/images/demo3.jpg)<figcaption>Demo 3. The blue cloud, its outline, and the exclamation point are masked, the red/yellow/white explosion is drawn, and the background is a conic gradient.</figcaption>
 
-We can use Houdini to carve any shape out of a div with the [`mask-image`](https://developer.mozilla.org/en-US/docs/Web/CSS/mask-image) property.  Any element we do this to will still occupy a rectangle in the CSS box model of course, but within its box we can achieve any look we want.  For this third demo, I went a little crazy:  I re-created the [POP! explosion lithograph](https://www.imageduplicator.com/sat/sat_big_image.php?image_name=images/works/3794_01.jpg) Roy Lichtenstein made for the cover of the April 25, 1966 issue of *Newsweek*.  This one only works in Chrome because the polyfill does not seem to like multiple `paint` values in a single stylesheet.
+We can use Houdini to carve any shape out of a div with the [`mask-image`](https://developer.mozilla.org/en-US/docs/Web/CSS/mask-image) property.  Any element we do this to will still occupy a rectangle in the CSS box model of course, but within its box we can achieve any look we want.  For this third demo, I went a little crazy:  I re-created the [POP! explosion](https://www.imageduplicator.com/sat/sat_big_image.php?image_name=images/works/3794_01.jpg) lithograph that [Roy Lichtenstein](https://lichtensteinfoundation.org/biography/) made for the cover of the April 25, 1966, issue of *Newsweek*.  This one only works in Chrome because the polyfill does not seem to like multiple `paint` values in a single stylesheet.
 ```html
   <!--index3.html -->
   <body class="shape">
@@ -241,12 +242,12 @@ We can use Houdini to carve any shape out of a div with the [`mask-image`](https
     }
   </style>
 ```
-In the body we have divs for the blue cloud, its outline, the red/white/yellow explosion with the word 'POP', and the exclamation point.  I'll link to the repo again [here](https://github.com/jamessouth/paint-demo) since the remaining styles are long.
+Here is the [repo again](https://github.com/jamessouth/paint-demo) since the remaining styles are long.  As you can see, using Houdini to mask an element is pretty much the same as drawing in it.
 
-To help draw these shapes I used [this tool](http://www.victoriakirst.com/beziertool/) which generates the draw instructions and adds x- and y-offsets, which I then used to position the shape within the div.  As you can see, using Houdini to mask an element is pretty much the same as drawing in it.
+To help draw these shapes I used [this tool](http://www.victoriakirst.com/beziertool/) which generates the draw instructions and adds x- and y-offsets, which I then used to position the shape within the div.
 ##More on the polyfill
 
-One last thing I wanted to show with the polyfill was that calling `paint` in your CSS before other declarations seems to work better than putting it just anywhere.  I made [Demo 4](https://jamessouth.github.io/paint-demo/demo4.html) to show that there is some caching issue when `paint` is called in SCSS, but also to say that if other declarations come before it the polyfill doesn't run as often, so you just get the body's background color.
+One last thing I wanted to show with the polyfill was that calling `paint` in your CSS before other declarations seems to work better than putting it just anywhere.  I made [Demo 4](https://jamessouth.github.io/paint-demo/demo4.html) to show the aforementioned caching issue when `paint` is called in SCSS, but also to say that if other declarations come before it the polyfill doesn't run as often, so you just get the body's background color.
 ```scss
 //demo4.scss
 .cache{
