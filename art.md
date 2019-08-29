@@ -15,7 +15,8 @@ The basics of using Houdini are as follows:  for any CSS property that takes an 
 import '../css/demo.scss';
 
 if (CSS.paintWorklet) {
-  CSS.paintWorklet.addModule('./demo.min.js');//not imported so won't be picked up by webpack
+  //not imported so won't be picked up by webpack, which is ok
+  CSS.paintWorklet.addModule('./demo.min.js');
 } else {
   import(/* webpackChunkName: "css-paint-polyfill" */ 'css-paint-polyfill').then(() => {
     CSS.paintWorklet.addModule('./demo.min.js');
@@ -216,7 +217,10 @@ class Demo2 {
       ctx.lineTo(...end);
       ctx.lineWidth = Demo2.getWidth();
       ctx.lineCap = 'square';
-      ctx.strokeStyle = `rgba(${Demo2.getColor(36, 150)}, ${Demo2.getColor(108, 150)}, ${Demo2.getColor(12, 200)}, ${Demo2.getTransparency()})`;
+      ctx.strokeStyle = `rgba(${Demo2.getColor(36, 150)},
+        ${Demo2.getColor(108, 150)},
+        ${Demo2.getColor(12, 200)},
+        ${Demo2.getTransparency()})`;
       ctx.stroke();
     }
   }
@@ -266,7 +270,8 @@ CSS for the cloud and outline:
 //(partial) demo3.scss
 #blue{
   background-color: #f5f9fc;
-  background-image: radial-gradient(#1b4282 30%, #122182 32%, #1a237e12 33%), radial-gradient(#1b4282 30%, #14248e 32%, #1a237e08 33%);
+  background-image: radial-gradient(#1b4282 30%, #122182 32%, #1a237e12 33%),
+                    radial-gradient(#1b4282 30%, #14248e 32%, #1a237e08 33%);
   background-size: 8px 8px;
   background-position: 0 0, 4px 4px;
 }
@@ -278,7 +283,7 @@ CSS for the cloud and outline:
 
 As far as the worklet code goes, there is little difference between masking and drawing.  For the [exclamation point](https://github.com/jamessouth/paint-demo/blob/master/src/js/demo3b.js) and [cloud outline](https://github.com/jamessouth/paint-demo/blob/master/src/js/demo3d.js), either way works since they are solid colors.  The [red/yellow/white explosion](https://github.com/jamessouth/paint-demo/blob/master/src/js/demo3a.js) is solid too but I drew it so that I could apply the dark outlines; it does not seem possible to both mask a shape and have an outline around it, which is why the cloud's outline is a separate worklet.
 
-I tried to pattern the [blue cloud](https://github.com/jamessouth/paint-demo/blob/master/src/js/demo3c.js) in the worklet but it wasn't looking good.  A nested loop can be used to draw across the width and height of the subject element, but I didn't find a way to keep what is drawn confined within the cloud's boundaries.  I also tried the [ctx.createPattern()](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createPattern) method but I couldn't find a way to get an image into the worklet to be the pattern source.  So, I made the cloud's pattern in CSS then masked the shape in a worklet, thus requiring another worklet to make the outline.
+I tried to pattern the [blue cloud](https://github.com/jamessouth/paint-demo/blob/master/src/js/demo3c.js) in the worklet but it wasn't looking good.  A nested loop can be used to draw across the width and height of the subject element, but I didn't find a way to keep what is drawn confined within the cloud's boundaries.  I also tried the [ctx.createPattern()](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createPattern) method but I couldn't find a way to get an image into the worklet (no DOM access) to be the pattern source.  So, I made the cloud's pattern in CSS then masked the shape in a worklet, thus requiring another worklet to make the outline.
 
 To help draw these shapes I used [this tool](http://www.victoriakirst.com/beziertool/) which generates the draw instructions and adds x- and y-offsets, which I then used to position the shape within the div.
 ##More on the polyfill and conclusion
@@ -287,6 +292,7 @@ One last thing I wanted to show with the polyfill was that calling `paint` in yo
 ```scss
 //demo4.scss
 .cache{
+  //put paint declaration first for best results
   background-image: linear-gradient(black, black);
   background-image: paint(demo4);
   --rays: 582;
@@ -300,4 +306,4 @@ Before I discovered this placement made a difference, it took seemingly random d
 
 <hr>
 
-Houdini is nascent technology with [growing browser support](https://ishoudinireadyyet.com/), but we can already do lots of cool things with our backgrounds, borders, and divs.  If you can imagine it, you can draw it.  I hope you found this article helpful and are inspired and empowered to use `paint` in your projects to push your front-end creativity forward.  Please leave a comment and share widely!  Thank you!
+Houdini is nascent technology with [growing browser support](https://ishoudinireadyyet.com/), but we can already do lots of cool things with our backgrounds, borders, and divs.  If you can imagine it, you can draw it!  I hope you found this article helpful and are inspired and empowered to use `paint` to push your front-end creativity forward.  Please leave a comment and share widely!  Thank you!
