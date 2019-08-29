@@ -300,4 +300,4 @@ Before I discovered this placement made a difference, it took seemingly random d
 
 <hr>
 
-Houdini is nascent technology with [growing browser support](https://ishoudinireadyyet.com/), but we can already do lots of cool things with our backgrounds, borders, and divs.  I hope you are inspired and empowered to use `paint` in your projects and that I have provided the to break new ground in front-end creativity
+Houdini is nascent technology with [growing browser support](https://ishoudinireadyyet.com/), but we can already do lots of cool things with our backgrounds, borders, and divs.  If you can imagine it, you can draw it.  I hope you found this article helpful and are inspired and empowered to use `paint` in your projects to push your front-end creativity forward.  Please leave a comment and share widely!  Thank you!
