@@ -230,7 +230,7 @@ In my [portfolio site](https://jamessouth.github.io/portfolio/), I only used thi
 
 ![Demo 3](https://raw.githubusercontent.com/jamessouth/paint-demo/master/images/demo3.jpg)<figcaption>Demo 3. The blue cloud, its outline, and the exclamation point are masked, the red/yellow/white explosion is drawn, and the background is a CSS conic gradient.</figcaption>
 
-We can use Houdini to carve any shape out of a div with the [`mask-image`](https://developer.mozilla.org/en-US/docs/Web/CSS/mask-image) property.  Any element we do this to will still occupy a rectangle in the CSS box model of course, but within its box we can achieve any look we want.  For this third demo, I went a little crazy:  I re-created the [POP! explosion](https://www.imageduplicator.com/sat/sat_big_image.php?image_name=images/works/3794_01.jpg) lithograph that American artist [Roy Lichtenstein](https://lichtensteinfoundation.org/biography/) made for the cover of the April 25, 1966, issue of *Newsweek*.  This one only works in Chrome because the polyfill does not seem to like multiple `paint` values in a single stylesheet.  Demo 3 is [live here](https://jamessouth.github.io/paint-demo/demo3.html).
+We can use Houdini to carve any shape out of a div with the [`mask-image`](https://developer.mozilla.org/en-US/docs/Web/CSS/mask-image) property.  Any element we do this to will still occupy a rectangle in the CSS box model of course, but within its box we can achieve any look we want.  For this third demo, I went a little crazy:  I re-created the [POP! explosion](https://www.imageduplicator.com/sat/sat_big_image.php?image_name=images/works/3794_01.jpg) lithograph that American artist [Roy Lichtenstein](https://lichtensteinfoundation.org/biography/) made for the cover of the April 25, 1966, issue of *Newsweek*.  This one only works in Chrome because the polyfill does not seem to like multiple `paint` values in a single style sheet, but you can use multiple style sheets with one `paint` invocation each to work around this issue.  Demo 3 is [live here](https://jamessouth.github.io/paint-demo/demo3.html).
 ```html
   <!--index3.html -->
   <body class="shape">
@@ -278,12 +278,12 @@ CSS for the cloud and outline:
 
 As far as the worklet code goes, there is little difference between masking and drawing.  For the [exclamation point](https://github.com/jamessouth/paint-demo/blob/master/src/js/demo3b.js) and [cloud outline](https://github.com/jamessouth/paint-demo/blob/master/src/js/demo3d.js), either way works since they are solid colors.  The [red/yellow/white explosion](https://github.com/jamessouth/paint-demo/blob/master/src/js/demo3a.js) is solid too but I drew it so that I could apply the dark outlines; it does not seem possible to both mask a shape and have an outline around it, which is why the cloud's outline is a separate worklet.
 
-I tried to pattern the [blue cloud](https://github.com/jamessouth/paint-demo/blob/master/src/js/demo3c.js) in the worklet but it wasn't looking good.  A nested loop can be used to draw across the width and height of the subject element, but I didn't find a way to keep what is drawn confined within the cloud's boundaries.  I also tried the [ctx.createPattern()](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createPattern) method but I couldn't find a way to get an image into the worklet to be the pattern source.  So, I made the cloud's pattern in CSS then masked the shape in the worklet, thus requiring another worklet to make the outline.
+I tried to pattern the [blue cloud](https://github.com/jamessouth/paint-demo/blob/master/src/js/demo3c.js) in the worklet but it wasn't looking good.  A nested loop can be used to draw across the width and height of the subject element, but I didn't find a way to keep what is drawn confined within the cloud's boundaries.  I also tried the [ctx.createPattern()](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createPattern) method but I couldn't find a way to get an image into the worklet to be the pattern source.  So, I made the cloud's pattern in CSS then masked the shape in a worklet, thus requiring another worklet to make the outline.
 
 To help draw these shapes I used [this tool](http://www.victoriakirst.com/beziertool/) which generates the draw instructions and adds x- and y-offsets, which I then used to position the shape within the div.
-##More on the polyfill
+##More on the polyfill and conclusion
 
-One last thing I wanted to show with the polyfill was that calling `paint` in your CSS before other declarations seems to work better than putting it just anywhere.  I made [Demo 4](https://jamessouth.github.io/paint-demo/demo4.html) to show the aforementioned caching issue when `paint` is called in SCSS, but also to say that if other declarations come before it the polyfill doesn't run as often, so you just get the body's background color.  The cover image of this article is a shot of Demo 4.
+One last thing I wanted to show with the polyfill was that calling `paint` in your CSS before other declarations seems to work better than putting it just anywhere.  I made [Demo 4](https://jamessouth.github.io/paint-demo/demo4.html) to show the aforementioned caching issue when `paint` is called in SCSS, but also to say that if other declarations come before it the polyfill doesn't seem to run as often, so you just get the body's background color.  The cover image of this article is a shot of Demo 4.
 ```scss
 //demo4.scss
 .cache{
@@ -296,4 +296,8 @@ One last thing I wanted to show with the polyfill was that calling `paint` in yo
 ```
 <figcaption><a href="https://github.com/jamessouth/paint-demo/blob/master/src/css/demo4.scss">demo4.scss</a></figcaption>
 
-Before I discovered this placement made a difference, it took seemingly random declarations like `display: block` (even though that is already the default on a div) to get the polyfill to run 😖😕😵🤦‍♂️.  
+Before I discovered this placement made a difference, it took seemingly random declarations like `display: block` (even though that is already the default on a div) to get the polyfill to run 😖😕😵🤦‍♂️.
+
+<hr>
+
+Houdini is nascent technology with [growing browser support](https://ishoudinireadyyet.com/), but we can already do lots of cool things with our backgrounds, borders, and divs.  I hope you are inspired and empowered to use `paint` in your projects and that I have provided the to break new ground in front-end creativity
