@@ -1,2 +1,2 @@
 # paint-demo
-css paint api demo
+CSS Paint API demos from the most important article ever.
